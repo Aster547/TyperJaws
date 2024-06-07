@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Jaws (NES) Music - Jaws Approaching.mp3-5320c7dc48088199023b13ecd4fb58df.mp3str"
+
+[deps]
+
+source_file="res://assets/Sound/Jaws (NES) Music - Jaws Approaching.mp3"
+dest_files=[ "res://.import/Jaws (NES) Music - Jaws Approaching.mp3-5320c7dc48088199023b13ecd4fb58df.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

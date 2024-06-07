@@ -1,0 +1,57 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://assets/SpaceMono-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/CustomAssets/shark-alive.png" type="Texture" id=2]
+[ext_resource path="res://Enemy.gd" type="Script" id=3]
+[ext_resource path="res://assets/CustomAssets/shark-elec.png" type="Texture" id=4]
+[ext_resource path="res://assets/CustomAssets/shark-dead.png" type="Texture" id=5]
+[ext_resource path="res://AnimationPlayer.gd" type="Script" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 24
+font_data = ExtResource( 1 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 36.8526, 42.3681 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "death"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 2 ), ExtResource( 5 ), ExtResource( 4 ) ]
+}
+
+[node name="Enemy" type="KinematicBody2D"]
+script = ExtResource( 3 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = -116.0
+margin_top = 28.0
+margin_right = 81.0
+margin_bottom = 74.0
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Type this![/center]"
+text = "Type this!"
+scroll_active = false
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 2 )
+region_rect = Rect2( 408, 900, 97, 91 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.26953, -0.634766 )
+shape = SubResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/death = SubResource( 3 )
+script = ExtResource( 6 )

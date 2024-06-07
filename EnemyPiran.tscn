@@ -1,0 +1,95 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/SpaceMono-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/CustomAssets/piranha-alive.png" type="Texture" id=2]
+
+[sub_resource type="GDScript" id=3]
+script/source = "	extends KinematicBody2D
+
+
+export (Color) var blue = Color(\"#4682b4\")
+export (Color) var green = Color(\"#639765\")
+export (Color) var red = Color(\"#a65455\")
+
+export (float) var speed = 2
+
+
+onready var prompt = $RichTextLabel
+onready var prompt_text = prompt.text
+
+
+func _ready() -> void:
+	prompt_text = PromptListSingle.get_prompt()
+	prompt.parse_bbcode(set_center_tags(prompt_text))
+	GlobalSignals.connect(\"difficulty_increased\", self, \"handle_difficulty_increased\")
+
+
+func _physics_process(delta: float) -> void:
+	global_position.x -= speed
+
+
+func set_difficulty(difficulty: int):
+	handle_difficulty_increased(difficulty)
+
+
+func handle_difficulty_increased(new_difficulty: int):
+	var new_speed = speed + (0.125 * new_difficulty)
+	speed = clamp(new_speed, speed, 3)
+
+
+func get_prompt() -> String:
+	return prompt_text
+
+
+func set_next_character(next_character_index: int):
+	var blue_text = get_bbcode_color_tag(blue) + prompt_text.substr(0, next_character_index) + get_bbcode_end_color_tag()
+	var green_text = get_bbcode_color_tag(green) + prompt_text.substr(next_character_index, 1) + get_bbcode_end_color_tag()
+	var red_text = \"\"
+
+	if next_character_index != prompt_text.length():
+		red_text = get_bbcode_color_tag(red) + prompt_text.substr(next_character_index + 1, prompt_text.length() - next_character_index + 1) + get_bbcode_end_color_tag()
+
+	prompt.parse_bbcode(set_center_tags(blue_text + green_text + red_text))
+
+
+func set_center_tags(string_to_center: String):
+	return \"[center]\" + string_to_center + \"[/center]\"
+
+
+func get_bbcode_color_tag(color: Color) -> String:
+	return \"[color=#\" + color.to_html(false) + \"]\"
+
+
+func get_bbcode_end_color_tag() -> String:
+	return \"[/color]\"
+"
+
+[sub_resource type="DynamicFont" id=1]
+size = 24
+font_data = ExtResource( 1 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 36.8526, 42.3681 )
+
+[node name="EnemyPiran" type="KinematicBody2D"]
+script = SubResource( 3 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = -163.0
+margin_top = 58.0
+margin_right = 34.0
+margin_bottom = 104.0
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Type this![/center]"
+text = "Type this!"
+scroll_active = false
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.15, 0.15 )
+texture = ExtResource( 2 )
+region_rect = Rect2( 408, 900, 97, 91 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.26953, -0.634766 )
+shape = SubResource( 2 )
